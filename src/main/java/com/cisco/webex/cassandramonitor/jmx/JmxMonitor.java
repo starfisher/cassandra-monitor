@@ -38,16 +38,16 @@ public class JmxMonitor {
         }
     }
 
-//    @Scheduled(cron = "0/1 * * * * ? ")
-//    public void schedule() throws Exception {
-//        try {
-//            for(String s : list) {
-//                probe.printInfo(s);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            probe.close();
-//        }
-//    }
+    @Scheduled(cron = "0/1 * * * * ? ")
+    public void schedule() throws Exception {
+        try {
+            for(String s : list) {
+                probe.logMBeanInfo(s);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            probe.close();
+        }
+    }
 
 }

@@ -3,6 +3,8 @@ package com.cisco.webex.cassandramonitor.jmx;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.management.*;
 import javax.management.remote.JMXConnector;
@@ -23,6 +25,8 @@ import java.util.Map;
 
 public class CassNodeProbe implements AutoCloseable
 {
+    private final Logger logger = LoggerFactory.getLogger(CassNodeProbe.class);
+
     private static final String fmtUrl = "service:jmx:rmi:///jndi/rmi://[%s]:%d/jmxrmi";
     private static final int defaultPort = 7199;
     private final String host;
@@ -86,6 +90,7 @@ public class CassNodeProbe implements AutoCloseable
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonStr = objectMapper.writeValueAsString(jmxBean);
         System.out.println(jsonStr);
+        logger.info(jsonStr);
     }
 
 

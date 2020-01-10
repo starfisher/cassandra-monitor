@@ -1,0 +1,18 @@
+monitor:
+  host: 10.224.57.244
+  port: 7199
+  username: cassandra
+  password: cassandra
+
+logging:
+  level:
+    org:
+      springframework:
+        security: info
+    hibernate: info
+
+  pattern:
+    file: '%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n'
+    console: '%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n'
+  file:
+    path: C:/MyProject/cassandra-monitor.log
