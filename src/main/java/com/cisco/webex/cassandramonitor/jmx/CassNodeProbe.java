@@ -1,52 +1,41 @@
 package com.cisco.webex.cassandramonitor.jmx;
 
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.management.*;
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 import javax.rmi.ssl.SslRMIClientSocketFactory;
-import java.beans.BeanInfo;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.RMISocketFactory;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class CassNodeProbe implements AutoCloseable
 {
     private final Logger logger = LoggerFactory.getLogger(CassNodeProbe.class);
-
     private static final String fmtUrl = "service:jmx:rmi:///jndi/rmi://[%s]:%d/jmxrmi";
-    private static final int defaultPort = 7199;
-    private final String host;
-    private final int port;
-    private String username;
-    private String password;
 
+    private CassConfig cassConfig;
     private JMXConnector jmxConnector;
     private MBeanServerConnection mBeanServerConnection;
 
-    public CassNodeProbe(String host, int port, String username, String password)
-            throws IOException, ClassNotFoundException {
-        assert username != null && username != ""  && password != null && password != ""
-                : "neither username nor password can be blank";
-        this.host = host;
-        this.port = port;
-        this.username = username;
-        this.password = password;
+    public CassNodeProbe(@Qualifier("cassConfig") CassConfig cassConfig) throws Exception {
+        this.cassConfig = cassConfig;
         connect();
     }
+
 
     private RMIClientSocketFactory getRMIClientSocketFactory() throws IOException
     {
@@ -59,11 +48,12 @@ public class CassNodeProbe implements AutoCloseable
 
 
     private void connect() throws IOException, ClassNotFoundException {
-        JMXServiceURL jmxUrl = new JMXServiceURL(String.format(fmtUrl, host, port));
+        String url = String.format(fmtUrl, cassConfig.getHost(), cassConfig.getPort());
+        JMXServiceURL jmxUrl = new JMXServiceURL(url);
         Map<String,Object> env = new HashMap<String,Object>();
-        if (username != null)
+        if (cassConfig.getUsername() != null)
         {
-            String[] creds = { username, password };
+            String[] creds = { cassConfig.getUsername(), cassConfig.getPassword() };
             env.put(JMXConnector.CREDENTIALS, creds);
         }
         env.put("com.sun.jndi.rmi.factory.socket", getRMIClientSocketFactory());
