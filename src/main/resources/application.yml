@@ -3,3 +3,4 @@ monitor:
   port: 7199
   username: cassandra
   password: cassandra
+  fixedRate: 3000
