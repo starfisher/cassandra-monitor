@@ -22,11 +22,11 @@ import java.rmi.server.RMISocketFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
+
 @Component
 public class CassNodeProbe implements AutoCloseable
 {
-    //private final Logger logger = LoggerFactory.getLogger(CassNodeProbe.class);
+    private final Logger logger = LoggerFactory.getLogger(CassNodeProbe.class);
     private static final String fmtUrl = "service:jmx:rmi:///jndi/rmi://[%s]:%d/jmxrmi";
 
     private CassConfig cassConfig;
@@ -63,9 +63,13 @@ public class CassNodeProbe implements AutoCloseable
         mBeanServerConnection = jmxConnector.getMBeanServerConnection();
     }
 
-    public void close() throws Exception
+    public void close()
     {
-        jmxConnector.close();
+        try {
+            jmxConnector.close();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     public void logMBeanInfo(String name) throws Exception {
@@ -82,7 +86,7 @@ public class CassNodeProbe implements AutoCloseable
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonStr = objectMapper.writeValueAsString(jmxBean);
         //System.out.println(jsonStr);
-        log.info(jsonStr);
+        logger.info(jsonStr);
     }
 
 

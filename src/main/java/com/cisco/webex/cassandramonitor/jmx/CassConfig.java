@@ -22,5 +22,8 @@ public class CassConfig {
     private String username;
     @Value("${monitor.password}")
     private String password;
+    @Value("${monitor.fixedRate}")
+    private int fixedRate;
+
 
 }
