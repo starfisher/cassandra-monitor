@@ -34,6 +34,10 @@ public class CassNodeProbe implements AutoCloseable
         connect();
     }
 
+    public int  getFixedRate() {
+        return cassConfig.getFixedRate();
+    }
+
 
     private RMIClientSocketFactory getRMIClientSocketFactory() throws IOException
     {
@@ -59,9 +63,13 @@ public class CassNodeProbe implements AutoCloseable
         mBeanServerConnection = jmxConnector.getMBeanServerConnection();
     }
 
-    public void close() throws Exception
+    public void close()
     {
-        jmxConnector.close();
+        try {
+            jmxConnector.close();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     public void logMBeanInfo(String name) throws Exception {
