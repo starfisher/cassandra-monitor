@@ -1,2 +1,6 @@
 org.apache.cassandra.db:type=StorageService
 org.apache.cassandra.metrics:type=ClientRequest,scope=Read,name=Latency
+org.apache.cassandra.metrics:type=ClientRequest,scope=Write,name=Latency
+org.apache.cassandra.metrics:type=ClientRequest,scope=RangeSlice,name=Latency
+org.apache.cassandra.metrics:type=ClientRequest,scope=CASRead,name=Latency
+org.apache.cassandra.metrics:type=ClientRequest,scope=CASWrite,name=Latency
