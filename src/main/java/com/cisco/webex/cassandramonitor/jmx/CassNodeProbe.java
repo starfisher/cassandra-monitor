@@ -38,6 +38,10 @@ public class CassNodeProbe implements AutoCloseable
         connect();
     }
 
+    public int  getFixedRate() {
+        return cassConfig.getFixedRate();
+    }
+
 
     private RMIClientSocketFactory getRMIClientSocketFactory() throws IOException
     {

@@ -22,10 +22,9 @@ public class JmxMonitor extends TimerTask {
 
     private static ArrayList<String> objectNames = new ArrayList<>();
 
-    public JmxMonitor(@Qualifier("cassNodeProbe") CassNodeProbe cassNodeProbe,
-                      @Qualifier("cassConfig") CassConfig cassConfig) throws Exception {
+    public JmxMonitor(@Qualifier("cassNodeProbe") CassNodeProbe cassNodeProbe) throws Exception {
         JmxMonitor.cassNodeProbe = cassNodeProbe;
-        int fixedRate = cassConfig.getFixedRate();
+        int fixedRate = cassNodeProbe.getFixedRate();
         BufferedReader reader = new BufferedReader(new InputStreamReader(JmxMonitor.class.getResourceAsStream("/mbean.cnf")));
         while (true) {
             String str = reader.readLine();
