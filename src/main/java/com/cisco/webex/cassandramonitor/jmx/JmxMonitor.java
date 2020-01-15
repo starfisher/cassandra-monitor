@@ -4,11 +4,14 @@ package com.cisco.webex.cassandramonitor.jmx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.system.ApplicationHome;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -25,7 +28,10 @@ public class JmxMonitor extends TimerTask {
     public JmxMonitor(@Qualifier("cassNodeProbe") CassNodeProbe cassNodeProbe) throws Exception {
         JmxMonitor.cassNodeProbe = cassNodeProbe;
         int fixedRate = cassNodeProbe.getFixedRate();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(JmxMonitor.class.getResourceAsStream("/mbean.cnf")));
+        ApplicationHome applicationHome = new ApplicationHome(getClass());
+        File jarF = applicationHome.getSource();
+        String mbeanFile = jarF.getParentFile().toString() + "/mbean.cnf";
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(mbeanFile)));
         while (true) {
             String str = reader.readLine();
             if(str!=null) {
