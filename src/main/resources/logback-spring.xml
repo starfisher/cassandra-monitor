@@ -19,7 +19,7 @@
 <file>./logs/cassandra-mtrics.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>cassandra-mtrics.%i.log</fileNamePattern>
+            <fileNamePattern>./logs/cassandra-mtrics.%i.log</fileNamePattern>
             <minIndex>1</minIndex>
             <maxIndex>6</maxIndex>
         </rollingPolicy>
